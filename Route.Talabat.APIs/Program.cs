@@ -1,6 +1,9 @@
-  namespace Route.Talabat.APIs
+using Microsoft.EntityFrameworkCore;
+using Route.Talabat.Infrastructure.Data;
+
+namespace Route.Talabat.APIs
 {
-	public class Program
+    public class Program
 	{
 		public static void Main(string[] args)
 		{
@@ -13,7 +16,11 @@
 			
 			// Add all services of swagger to DI container
 			webApplicationBuilder.Services.AddEndpointsApiExplorer();
-			webApplicationBuilder.Services.AddSwaggerGen(); 
+			webApplicationBuilder.Services.AddSwaggerGen();
+
+			webApplicationBuilder.Services.AddDbContext<ApplicationContext>((options) => {
+				options.UseSqlServer(webApplicationBuilder.Configuration.GetConnectionString("defaultConnection"));
+				});
 			#endregion
 
 			var app = webApplicationBuilder.Build();
