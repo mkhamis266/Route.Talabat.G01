@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using Route.Talabat.Core.Repositories.Contract;
+using Route.Talabat.Infrastructure;
 using Route.Talabat.Infrastructure.Data;
 
 namespace Route.Talabat.APIs
@@ -18,6 +20,8 @@ namespace Route.Talabat.APIs
 			// Add all services of swagger to DI container
 			webApplicationBuilder.Services.AddEndpointsApiExplorer();
 			webApplicationBuilder.Services.AddSwaggerGen();
+
+			webApplicationBuilder.Services.AddScoped(typeof(IGenericRepository<>),typeof(GenericRepository<>));
 
 			webApplicationBuilder.Services.AddDbContext<ApplicationDbContext>((options) =>
 			{
