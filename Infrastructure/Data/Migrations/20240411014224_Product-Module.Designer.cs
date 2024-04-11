@@ -10,7 +10,7 @@ using Route.Talabat.Infrastructure.Data;
 
 namespace Route.Talabat.Infrastructure.Data.Migrations
 {
-    [DbContext(typeof(ApplicationContext))]
+    [DbContext(typeof(ApplicationDbContext))]
     [Migration("20240411014224_Product-Module")]
     partial class ProductModule
     {

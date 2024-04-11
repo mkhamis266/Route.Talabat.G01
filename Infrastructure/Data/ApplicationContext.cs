@@ -9,9 +9,9 @@ using Route.Talabat.Core.Entities;
 
 namespace Route.Talabat.Infrastructure.Data
 {
-    public class ApplicationContext : DbContext
+    public class ApplicationDbContext : DbContext
     {
-        public ApplicationContext(DbContextOptions options) : base(options) { }
+        public ApplicationDbContext(DbContextOptions options) : base(options) { }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
