@@ -18,7 +18,10 @@ namespace Route.Talabat.Infrastructure.Data
 			var CatigoriesJson = File.ReadAllText("../Infrastructure/Data/DataSeed/categories.json");
 			var Categories = JsonSerializer.Deserialize<List<ProductCategory>>(CatigoriesJson);
 
-			if (dbContext.ProductBrands.Count() == 0)
+			var ProductsJson = File.ReadAllText("../Infrastructure/Data/DataSeed/products.json");
+			var Products = JsonSerializer.Deserialize<List<Product>>(ProductsJson);
+
+			if (Brands is not null && dbContext.ProductBrands.Count() == 0)
 			{
 				foreach (var brand in Brands)
 				{
@@ -26,14 +29,23 @@ namespace Route.Talabat.Infrastructure.Data
 				}
 			}
 
-			if (dbContext.ProductCategories.Count() == 0)
+			if (Categories is not null && dbContext.ProductCategories.Count() == 0)
 			{
 				foreach (var category in Categories)
 				{
 					dbContext.ProductCategories.Add(category);
 				}
 			}
-			dbContext.SaveChangesAsync();			
+
+			if (Products is not null && dbContext.Products.Count()== 0)
+			{
+				foreach (var product in Products)
+				{
+					dbContext.Products.Add(product);
+				}
+			}
+
+			await dbContext.SaveChangesAsync();			
 		}
 	}
 }
