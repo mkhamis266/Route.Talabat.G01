@@ -58,9 +58,9 @@ namespace Route.Talabat.APIs
 				app.UseSwagger();
 				app.UseSwaggerUI();
 			}
-
+			
 			app.UseHttpsRedirection();
-
+			app.UseStaticFiles();
 			//app.UseRouting();
 			//app.UseEndpoints(endpoints =>
 			//{
