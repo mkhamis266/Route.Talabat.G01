@@ -1,0 +1,28 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Route.Talabat.Core.Entities;
+
+namespace Route.Talabat.Core.specifications.ProductSpecs
+{
+	public class ProductsWithBrandAndCategorySpecifications:BaseSpecifications<Product>
+	{
+        public ProductsWithBrandAndCategorySpecifications():base()
+        {
+            AddIncludes();
+        }
+
+        public ProductsWithBrandAndCategorySpecifications(int id):base(P=>P.Id == id)
+        {
+			AddIncludes();
+		}
+
+        private void AddIncludes()
+        {
+			Includes.Add(P => P.Brand);
+			Includes.Add(P => P.Category);
+		}
+    }
+}

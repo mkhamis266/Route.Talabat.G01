@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Route.Talabat.Core.Entities;
 using Route.Talabat.Core.Repositories.Contract;
+using Route.Talabat.Core.specifications;
 using Route.Talabat.Infrastructure.Data;
 
 namespace Route.Talabat.Infrastructure
@@ -26,6 +27,8 @@ namespace Route.Talabat.Infrastructure
 			return await _dbContext.Set<T>().ToListAsync();
 		}
 
+		
+
 		public async Task<T?> GetAsync(int id)
 		{
 			if (typeof(T) == typeof(Product))
@@ -33,6 +36,20 @@ namespace Route.Talabat.Infrastructure
 					(P => P.Category).FirstOrDefaultAsync() as T;
 
 				return await _dbContext.FindAsync<T>(id);
+		}
+		public async Task<IEnumerable<T>> GetAllWithSpecAsync(ISpecifications<T> specs)
+		{
+			return await ApplySpecifacations(specs).ToListAsync();
+		}
+
+		public async Task<T?> GetWithSpecAsync(ISpecifications<T> specs)
+		{
+			return await ApplySpecifacations(specs).FirstOrDefaultAsync();
+		}
+
+		private IQueryable<T> ApplySpecifacations(ISpecifications<T> specs)
+		{
+			return SpecificationsEvaluator<T>.GetQuery(_dbContext.Set<T>(), specs);
 		}
 	}
 }
