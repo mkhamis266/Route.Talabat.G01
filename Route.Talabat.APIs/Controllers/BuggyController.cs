@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Route.Talabat.APIs.Errors;
 using Route.Talabat.Infrastructure.Data;
 
 namespace Route.Talabat.APIs.Controllers
@@ -21,7 +22,7 @@ namespace Route.Talabat.APIs.Controllers
 			if(Product is not null)
 				return Ok(Product);
 
-			return NotFound();
+			return NotFound(new ApiResponse(404));
 		}
 
 		[HttpGet("servererror")]
@@ -34,7 +35,7 @@ namespace Route.Talabat.APIs.Controllers
 		[HttpGet("badrequest")]
 		public ActionResult GetBaddRequest()
 		{
-			return BadRequest();
+			return BadRequest(new ApiResponse(400));
 		}
 		[HttpGet("badrequest/{id}")] //badrequest/five
 		public ActionResult GetBaddRequest(int id)

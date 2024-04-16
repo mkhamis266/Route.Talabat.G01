@@ -49,7 +49,7 @@ namespace Route.Talabat.Infrastructure
 
 		private IQueryable<T> ApplySpecifacations(ISpecifications<T> specs)
 		{
-			return SpecificationsEvaluator<T>.GetQuery(_dbContext.Set<T>(), specs);
+			return SpecificationsEvaluator<T>.GetQuery(_dbContext.Set<T>(), specs).AsNoTracking();
 		}
 	}
 }
