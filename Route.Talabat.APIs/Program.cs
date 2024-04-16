@@ -1,5 +1,10 @@
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using Route.Talabat.APIs.Errors;
+using Route.Talabat.APIs.Extensions;
+using Route.Talabat.APIs.Helpers;
+using Route.Talabat.APIs.Middlewares;
 using Route.Talabat.Core.Repositories.Contract;
 using Route.Talabat.Infrastructure;
 using Route.Talabat.Infrastructure.Data;
@@ -16,17 +21,12 @@ namespace Route.Talabat.APIs
 			// Add services to the DI container.
 			webApplicationBuilder.Services.AddControllers();
 			// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-
-			// Add all services of swagger to DI container
-			webApplicationBuilder.Services.AddEndpointsApiExplorer();
-			webApplicationBuilder.Services.AddSwaggerGen();
-
-			webApplicationBuilder.Services.AddScoped(typeof(IGenericRepository<>),typeof(GenericRepository<>));
-
+			webApplicationBuilder.Services.AddSwaggerServices();
 			webApplicationBuilder.Services.AddDbContext<ApplicationDbContext>((options) =>
 			{
 				options.UseSqlServer(webApplicationBuilder.Configuration.GetConnectionString("defaultConnection"));
 			});
+			webApplicationBuilder.Services.AddApplicationServices();
 			#endregion
 
 			var app = webApplicationBuilder.Build();
@@ -50,14 +50,16 @@ namespace Route.Talabat.APIs
 
 			#region Configure
 			// Configure the HTTP request pipeline.
+
+			app.UseMiddleware<ExceptionMiddleware>();
 			if (app.Environment.IsDevelopment())
 			{
-				app.UseSwagger();
-				app.UseSwaggerUI();
+				app.UseSwaggerMiddlewares();
 			}
 
+			app.UseStatusCodePagesWithReExecute("/errors/{0}");
 			app.UseHttpsRedirection();
-
+			app.UseStaticFiles();
 			//app.UseRouting();
 			//app.UseEndpoints(endpoints =>
 			//{
