@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Route.Talabat.APIs.DTOs;
+using Route.Talabat.APIs.Errors;
 using Route.Talabat.Core.Entities;
 using Route.Talabat.Core.Repositories.Contract;
 using Route.Talabat.Core.specifications;
@@ -30,6 +31,8 @@ namespace Route.Talabat.APIs.Controllers
 		}
 
 		[HttpGet("{id}")]
+		[ProducesResponseType(typeof(ProductToReturnDTO), StatusCodes.Status200OK)]
+		[ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
 		public async Task<ActionResult<ProductToReturnDTO>> GetProductById(int id)
 		{
 			//var Product = await productsRepository.GetAsync(id);
