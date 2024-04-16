@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using Route.Talabat.APIs.Helpers;
 using Route.Talabat.Core.Repositories.Contract;
 using Route.Talabat.Infrastructure;
 using Route.Talabat.Infrastructure.Data;
@@ -27,6 +28,8 @@ namespace Route.Talabat.APIs
 			{
 				options.UseSqlServer(webApplicationBuilder.Configuration.GetConnectionString("defaultConnection"));
 			});
+
+			webApplicationBuilder.Services.AddAutoMapper(typeof(MappingProfiles));
 			#endregion
 
 			var app = webApplicationBuilder.Build();
