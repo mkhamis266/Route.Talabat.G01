@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Route.Talabat.APIs.Errors;
 using Route.Talabat.APIs.Helpers;
+using Route.Talabat.APIs.Middlewares;
 using Route.Talabat.Core.Repositories.Contract;
 using Route.Talabat.Infrastructure;
 using Route.Talabat.Infrastructure.Data;
@@ -71,6 +72,8 @@ namespace Route.Talabat.APIs
 
 			#region Configure
 			// Configure the HTTP request pipeline.
+
+			app.UseMiddleware<ExceptionMiddleware>();
 			if (app.Environment.IsDevelopment())
 			{
 				app.UseSwagger();
