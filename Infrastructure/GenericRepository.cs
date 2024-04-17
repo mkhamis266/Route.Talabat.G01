@@ -19,10 +19,10 @@ namespace Route.Talabat.Infrastructure
 		{
 			_dbContext = dbContext;
 		}
-		public async Task<IEnumerable<T>> GetAllAsync()
+		public async Task<IReadOnlyList<T>> GetAllAsync()
 		{
 			if(typeof(T) == typeof(Product))
-				return (IEnumerable < T >) await _dbContext.Products.Include(P => P.Brand).Include
+				return (IReadOnlyList < T >) await _dbContext.Products.Include(P => P.Brand).Include
 					(P => P.Category).ToListAsync();
 			return await _dbContext.Set<T>().ToListAsync();
 		}
@@ -37,7 +37,7 @@ namespace Route.Talabat.Infrastructure
 
 				return await _dbContext.FindAsync<T>(id);
 		}
-		public async Task<IEnumerable<T>> GetAllWithSpecAsync(ISpecifications<T> specs)
+		public async Task<IReadOnlyList<T>> GetAllWithSpecAsync(ISpecifications<T> specs)
 		{
 			return await ApplySpecifacations(specs).ToListAsync();
 		}

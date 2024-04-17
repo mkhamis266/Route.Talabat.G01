@@ -29,10 +29,10 @@ namespace Route.Talabat.APIs.Controllers
 		}
 
 		[HttpGet]
-		public async Task<ActionResult<IReadOnlyList<ProductToReturnDTO>>> GetAllProducts()
+		public async Task<ActionResult<IReadOnlyList<ProductToReturnDTO>>> GetAllProducts(string sort)
 		{
 			//var Products = await productsRepository.GetAllAsync();
-			var productSpecs = new ProductsWithBrandAndCategorySpecifications();
+			var productSpecs = new ProductsWithBrandAndCategorySpecifications(sort);
 			var Products = await productsRepository.GetAllWithSpecAsync(productSpecs);
 			return Ok(_mapper.Map<IReadOnlyList<Product>, IReadOnlyList<ProductToReturnDTO>>(Products));
 		}
