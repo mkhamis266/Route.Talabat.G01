@@ -14,20 +14,27 @@ namespace Route.Talabat.APIs.Controllers
 	{
 		private readonly IGenericRepository<Product> productsRepository;
 		private readonly IMapper _mapper;
+		private readonly IGenericRepository<ProductCategory> _productCatigoriesRepo;
+		private readonly IGenericRepository<ProductBrand> _productsBrandsRepo;
 
-		public ProductsController(IGenericRepository<Product> genericRepository,IMapper mapper)
+		public ProductsController(IGenericRepository<Product> genericRepository,IMapper mapper,
+			IGenericRepository<ProductCategory> productCatigoriesRepo,
+			IGenericRepository<ProductBrand> productsBrandsRepo
+			)
 		{
 			productsRepository = genericRepository;
 			_mapper = mapper;
+			_productCatigoriesRepo = productCatigoriesRepo;
+			_productsBrandsRepo = productsBrandsRepo;
 		}
 
 		[HttpGet]
-		public async Task<ActionResult<IEnumerable<ProductToReturnDTO>>> GetAllProducts()
+		public async Task<ActionResult<IReadOnlyList<ProductToReturnDTO>>> GetAllProducts()
 		{
 			//var Products = await productsRepository.GetAllAsync();
 			var productSpecs = new ProductsWithBrandAndCategorySpecifications();
 			var Products = await productsRepository.GetAllWithSpecAsync(productSpecs);
-			return Ok(_mapper.Map<IEnumerable<Product>, IEnumerable<ProductToReturnDTO>>(Products));
+			return Ok(_mapper.Map<IReadOnlyList<Product>, IReadOnlyList<ProductToReturnDTO>>(Products));
 		}
 
 		[HttpGet("{id}")]
@@ -41,6 +48,20 @@ namespace Route.Talabat.APIs.Controllers
 			if(Product is null)
 				return NotFound(new { Message = "Not Found",StatusCode = 404});
 			return Ok(_mapper.Map<Product,ProductToReturnDTO>(Product));
+		}
+
+		[HttpGet("brands")]
+		public async Task<ActionResult<IReadOnlyList<ProductBrand>>> GetProductBrands()
+		{
+			var brands =  await _productsBrandsRepo.GetAllAsync();
+			return Ok(brands);
+		}
+
+		[HttpGet("categories")]
+		public async Task<ActionResult<IReadOnlyList<ProductBrand>>> GetProductCategories()
+		{
+			var categories = await _productCatigoriesRepo.GetAllAsync();
+			return Ok(categories);
 		}
 	}
 }
