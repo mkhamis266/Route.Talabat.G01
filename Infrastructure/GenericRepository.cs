@@ -39,17 +39,22 @@ namespace Route.Talabat.Infrastructure
 		}
 		public async Task<IReadOnlyList<T>> GetAllWithSpecAsync(ISpecifications<T> specs)
 		{
-			return await ApplySpecifacations(specs).ToListAsync();
+			return await ApplySpecifacations(specs).AsNoTracking().ToListAsync();
 		}
 
 		public async Task<T?> GetWithSpecAsync(ISpecifications<T> specs)
 		{
-			return await ApplySpecifacations(specs).FirstOrDefaultAsync();
+			return await ApplySpecifacations(specs).AsNoTracking().FirstOrDefaultAsync();
 		}
 
 		private IQueryable<T> ApplySpecifacations(ISpecifications<T> specs)
 		{
-			return SpecificationsEvaluator<T>.GetQuery(_dbContext.Set<T>(), specs).AsNoTracking();
+			return SpecificationsEvaluator<T>.GetQuery(_dbContext.Set<T>(), specs);
+		}
+
+		public async Task<int> GetCountAsync(ISpecifications<T> specs)
+		{
+			return await ApplySpecifacations(specs).CountAsync();
 		}
 	}
 }

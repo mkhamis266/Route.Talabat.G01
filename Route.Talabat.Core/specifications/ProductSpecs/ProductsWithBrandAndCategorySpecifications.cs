@@ -9,12 +9,16 @@ namespace Route.Talabat.Core.specifications.ProductSpecs
 {
 	public class ProductsWithBrandAndCategorySpecifications:BaseSpecifications<Product>
 	{
-        public ProductsWithBrandAndCategorySpecifications(string sort):base()
+        public ProductsWithBrandAndCategorySpecifications(ProductSpecificationsParams productParams)
+            :base(P=>
+                    (!productParams.BrandId.HasValue || P.BrandId == productParams.BrandId) && 
+                    (!productParams.CategoryId.HasValue || P.CategoryId == productParams.CategoryId)    
+                )
         {
             AddIncludes();
-            if (!string.IsNullOrEmpty(sort))
+            if (!string.IsNullOrEmpty(productParams.Sort))
             {
-                switch (sort)
+                switch (productParams.Sort)
                 {
                     case "priceAsc":
                         AddOrderBy(P => P.Price);
@@ -27,6 +31,8 @@ namespace Route.Talabat.Core.specifications.ProductSpecs
                         break;
 				}
 			}
+
+            ApplyPagination(productParams.PageSize*(productParams.PageIndex-1),productParams.PageSize);
         }
 
         public ProductsWithBrandAndCategorySpecifications(int id):base(P=>P.Id == id)

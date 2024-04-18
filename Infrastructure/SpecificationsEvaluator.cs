@@ -24,6 +24,9 @@ namespace Route.Talabat.Infrastructure
 			if (specs.OrderByDescending is not null)
 				query = query.OrderByDescending(specs.OrderByDescending);
 
+			if (specs.IsPaginationEnabled)
+				query = query.Skip(specs.Skip).Take(specs.Take);
+
 			query = specs.Includes.Aggregate(query,(curruntQuery,includeExpression)=> curruntQuery.Include(includeExpression));
 			return query;
 		}
