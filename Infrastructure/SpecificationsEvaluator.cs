@@ -18,6 +18,15 @@ namespace Route.Talabat.Infrastructure
 			if(specs.Criteria is not null)
 				query = query.Where(specs.Criteria);
 
+			if(specs.OrderBy is not null)
+				query = query.OrderBy(specs.OrderBy);
+
+			if (specs.OrderByDescending is not null)
+				query = query.OrderByDescending(specs.OrderByDescending);
+
+			if (specs.IsPaginationEnabled)
+				query = query.Skip(specs.Skip).Take(specs.Take);
+
 			query = specs.Includes.Aggregate(query,(curruntQuery,includeExpression)=> curruntQuery.Include(includeExpression));
 			return query;
 		}

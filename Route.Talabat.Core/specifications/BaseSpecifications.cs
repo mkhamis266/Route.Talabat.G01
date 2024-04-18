@@ -12,8 +12,12 @@ namespace Route.Talabat.Core.specifications
 	{
 		public Expression<Func<T, bool>> Criteria { get; set; } = null; // default
 		public List<Expression<Func<T, object>>> Includes { get; set; } = new List<Expression<Func<T, object>>>();
-
-        public BaseSpecifications()
+		public Expression<Func<T, object>> OrderBy { get; set; } = null;
+		public Expression<Func<T, object>> OrderByDescending { get; set; } = null;
+		public int Skip { get; set; }
+		public int Take { get; set; }
+		public bool IsPaginationEnabled { get; set; }
+		public BaseSpecifications()
         {
 			//Criteria = null
 		}
@@ -22,5 +26,22 @@ namespace Route.Talabat.Core.specifications
         {
             Criteria = critrtiaExpression;
         }
-    }
+
+		public void AddOrderBy(Expression<Func<T, object>> orderByExpression)
+		{
+			OrderBy = orderByExpression;
+		}
+
+		public void AddOrderByDescending(Expression<Func<T, object>> orderByDescendingExpression)
+		{
+			OrderByDescending = orderByDescendingExpression;
+		}
+
+		public void ApplyPagination(int skip,int take)
+		{
+			IsPaginationEnabled = true;
+			Skip = skip;	
+			Take = take;
+		}
+	}
 }

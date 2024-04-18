@@ -9,9 +9,31 @@ namespace Route.Talabat.Core.specifications.ProductSpecs
 {
 	public class ProductsWithBrandAndCategorySpecifications:BaseSpecifications<Product>
 	{
-        public ProductsWithBrandAndCategorySpecifications():base()
+        public ProductsWithBrandAndCategorySpecifications(ProductSpecificationsParams productParams)
+            :base(P=>
+                    (!productParams.BrandId.HasValue || P.BrandId == productParams.BrandId) && 
+                    (!productParams.CategoryId.HasValue || P.CategoryId == productParams.CategoryId) &&
+                    (string.IsNullOrEmpty(productParams.Search) || P.Name.ToLower().Contains(productParams.Search))
+                )
         {
             AddIncludes();
+            if (!string.IsNullOrEmpty(productParams.Sort))
+            {
+                switch (productParams.Sort)
+                {
+                    case "priceAsc":
+                        AddOrderBy(P => P.Price);
+                        break;
+					case "priceDesc":
+                        AddOrderByDescending(P => P.Price);
+						break;
+                    default: 
+                        AddOrderBy(P => P.Name);
+                        break;
+				}
+			}
+
+            ApplyPagination(productParams.PageSize*(productParams.PageIndex-1),productParams.PageSize);
         }
 
         public ProductsWithBrandAndCategorySpecifications(int id):base(P=>P.Id == id)
