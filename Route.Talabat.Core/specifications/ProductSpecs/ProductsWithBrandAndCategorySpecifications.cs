@@ -12,7 +12,8 @@ namespace Route.Talabat.Core.specifications.ProductSpecs
         public ProductsWithBrandAndCategorySpecifications(ProductSpecificationsParams productParams)
             :base(P=>
                     (!productParams.BrandId.HasValue || P.BrandId == productParams.BrandId) && 
-                    (!productParams.CategoryId.HasValue || P.CategoryId == productParams.CategoryId)    
+                    (!productParams.CategoryId.HasValue || P.CategoryId == productParams.CategoryId) &&
+                    (string.IsNullOrEmpty(productParams.Search) || P.Name.ToLower().Contains(productParams.Search))
                 )
         {
             AddIncludes();

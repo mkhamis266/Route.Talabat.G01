@@ -17,7 +17,7 @@ namespace Route.Talabat.Infrastructure
 
 			if(specs.Criteria is not null)
 				query = query.Where(specs.Criteria);
-			
+
 			if(specs.OrderBy is not null)
 				query = query.OrderBy(specs.OrderBy);
 

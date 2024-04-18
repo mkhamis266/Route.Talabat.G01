@@ -12,7 +12,6 @@ namespace Route.Talabat.Core.specifications
 	{
 		public Expression<Func<T, bool>> Criteria { get; set; } = null; // default
 		public List<Expression<Func<T, object>>> Includes { get; set; } = new List<Expression<Func<T, object>>>();
-
 		public Expression<Func<T, object>> OrderBy { get; set; } = null;
 		public Expression<Func<T, object>> OrderByDescending { get; set; } = null;
 		public int Skip { get; set; }
