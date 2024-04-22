@@ -5,6 +5,7 @@ using Route.Talabat.APIs.Helpers;
 using Route.Talabat.Core.Repositories.Contract;
 using Route.Talabat.Infrastructure.Data;
 using Route.Talabat.Infrastructure;
+using StackExchange.Redis;
 
 namespace Route.Talabat.APIs.Extensions
 {
@@ -34,6 +35,7 @@ namespace Route.Talabat.APIs.Extensions
 					return new BadRequestObjectResult(resonse);
 				};
 			});
+			
 			return services;
 		}
 	}
