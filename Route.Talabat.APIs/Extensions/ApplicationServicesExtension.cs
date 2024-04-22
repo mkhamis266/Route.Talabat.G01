@@ -6,6 +6,7 @@ using Route.Talabat.Core.Repositories.Contract;
 using Route.Talabat.Infrastructure.Data;
 using Route.Talabat.Infrastructure;
 using StackExchange.Redis;
+using Route.Talabat.Core.Redis;
 
 namespace Route.Talabat.APIs.Extensions
 {
@@ -35,7 +36,7 @@ namespace Route.Talabat.APIs.Extensions
 					return new BadRequestObjectResult(resonse);
 				};
 			});
-			
+			services.AddScoped(typeof(IBasketRepository), typeof(BasketRepository));
 			return services;
 		}
 	}
