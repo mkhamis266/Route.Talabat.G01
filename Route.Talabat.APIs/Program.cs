@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -5,6 +6,7 @@ using Route.Talabat.APIs.Errors;
 using Route.Talabat.APIs.Extensions;
 using Route.Talabat.APIs.Helpers;
 using Route.Talabat.APIs.Middlewares;
+using Route.Talabat.Core.Entities.Identity;
 using Route.Talabat.Core.Repositories.Contract;
 using Route.Talabat.Infrastructure;
 using Route.Talabat.Infrastructure.Data;
@@ -36,6 +38,9 @@ namespace Route.Talabat.APIs
 			webApplicationBuilder.Services.AddDbContext<ApplicationIdentityDbContext>((options) => {
 				options.UseSqlServer(webApplicationBuilder.Configuration.GetConnectionString("IdentityConnection"));
 			});
+
+			webApplicationBuilder.Services.AddIdentity<ApplicationUser, IdentityRole>()
+				.AddEntityFrameworkStores<ApplicationIdentityDbContext>();
 			#endregion
 
 			var app = webApplicationBuilder.Build();
@@ -45,12 +50,14 @@ namespace Route.Talabat.APIs
 			var loggerFactory = Services.GetRequiredService<ILoggerFactory>();
 			var _dbContext = Services.GetRequiredService<ApplicationDbContext>();
 			var _applicationIdentityDbContext = Services.GetRequiredService<ApplicationIdentityDbContext>();
+			var _userManger = Services.GetRequiredService<UserManager<ApplicationUser>>();
 			//Ask CLR for object form ApplicationDbContextExplicitly
 			try
 			{
 				await _dbContext.Database.MigrateAsync(); // Apply All Migration 
-				await _applicationIdentityDbContext.Database.MigrateAsync();
 				await ApplicationContextSeed.SeedData(_dbContext); //Data Seeding
+				await _applicationIdentityDbContext.Database.MigrateAsync();
+				await ApplicationIdentityDbContextSeed.DataSeedAsync(_userManger);
 			}
 			catch (Exception ex)
 			{
