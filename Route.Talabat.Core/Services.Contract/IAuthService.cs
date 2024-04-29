@@ -8,7 +8,7 @@ using Route.Talabat.Core.Entities.Identity;
 
 namespace Route.Talabat.Core.Services.Contract
 {
-	public interface IAuthServices
+	public interface IAuthService
 	{
 		public Task<string> CreateTokenAsync(ApplicationUser User, UserManager<ApplicationUser> userManager);
 	}

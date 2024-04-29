@@ -8,9 +8,11 @@ using Route.Talabat.APIs.Helpers;
 using Route.Talabat.APIs.Middlewares;
 using Route.Talabat.Core.Entities.Identity;
 using Route.Talabat.Core.Repositories.Contract;
+using Route.Talabat.Core.Services.Contract;
 using Route.Talabat.Infrastructure;
 using Route.Talabat.Infrastructure.Data;
 using Route.Talabat.Infrastructure.Identity;
+using Route.Talabat.Services.AuthService;
 using StackExchange.Redis;
 
 namespace Route.Talabat.APIs
@@ -41,6 +43,8 @@ namespace Route.Talabat.APIs
 
 			webApplicationBuilder.Services.AddIdentity<ApplicationUser, IdentityRole>()
 				.AddEntityFrameworkStores<ApplicationIdentityDbContext>();
+
+			webApplicationBuilder.Services.AddScoped<IAuthService, AuthService>();
 			#endregion
 
 			var app = webApplicationBuilder.Build();

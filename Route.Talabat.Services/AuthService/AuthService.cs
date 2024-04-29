@@ -13,7 +13,7 @@ using Route.Talabat.Core.Services.Contract;
 
 namespace Route.Talabat.Services.AuthService
 {
-	public class AuthService : IAuthServices
+	public class AuthService : IAuthService
 	{
 		private readonly IConfiguration _configuration;
 
@@ -40,7 +40,7 @@ namespace Route.Talabat.Services.AuthService
 			var token = new JwtSecurityToken(
 					audience: _configuration["JWT:ValidAudience"],
 					issuer: _configuration["JWT:ValidIssuer"],
-					expires: DateTime.Now.AddDays(double.Parse(_configuration["JWT:ValidIssuer"]??"0")),
+					expires: DateTime.Now.AddDays(double.Parse(_configuration["JWT:DurationInDays"] ??"0")),
 					claims:authCkaims,
 					signingCredentials: new SigningCredentials(authKey,SecurityAlgorithms.HmacSha256Signature)
 				);

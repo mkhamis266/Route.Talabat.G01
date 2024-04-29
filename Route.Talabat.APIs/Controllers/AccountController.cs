@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Route.Talabat.APIs.DTOs;
 using Route.Talabat.APIs.Errors;
 using Route.Talabat.Core.Entities.Identity;
+using Route.Talabat.Core.Services.Contract;
 
 namespace Route.Talabat.APIs.Controllers
 {
@@ -12,11 +13,13 @@ namespace Route.Talabat.APIs.Controllers
 	{
 		private readonly UserManager<ApplicationUser> _userManager;
 		private readonly SignInManager<ApplicationUser> _signInManager;
+		private readonly IAuthService _authService;
 
-		public AccountController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager)
+		public AccountController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager,IAuthService authService)
 		{
 			_userManager = userManager;
 			_signInManager = signInManager;
+			_authService = authService;
 		}
 
 		[HttpPost("login")]
@@ -32,8 +35,8 @@ namespace Route.Talabat.APIs.Controllers
 			{
 				DisplayName = user.DisplayName,
 				Email = model.Email,
-				Token = "will be generated"
-			});
+				Token = await _authService.CreateTokenAsync(user, _userManager)
+			}); ;
 		}
 
 		[HttpPost("register")]
@@ -56,7 +59,7 @@ namespace Route.Talabat.APIs.Controllers
 			{ 
 				DisplayName = user.DisplayName, 
 				Email = user.Email, 
-				Token = "will be generated" 
+				Token = await _authService.CreateTokenAsync(user, _userManager)
 			});
 		}
 	}
