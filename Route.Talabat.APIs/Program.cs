@@ -8,6 +8,7 @@ using Route.Talabat.APIs.Middlewares;
 using Route.Talabat.Core.Repositories.Contract;
 using Route.Talabat.Infrastructure;
 using Route.Talabat.Infrastructure.Data;
+using Route.Talabat.Infrastructure.Identity;
 using StackExchange.Redis;
 
 namespace Route.Talabat.APIs
@@ -32,6 +33,9 @@ namespace Route.Talabat.APIs
 				var connection = webApplicationBuilder.Configuration.GetConnectionString("Redis");
 				return ConnectionMultiplexer.Connect(connection);
 			});
+			webApplicationBuilder.Services.AddDbContext<ApplicationIdentityDbContext>((options) => {
+				options.UseSqlServer(webApplicationBuilder.Configuration.GetConnectionString("IdentityConnection"));
+			});
 			#endregion
 
 			var app = webApplicationBuilder.Build();
@@ -40,10 +44,12 @@ namespace Route.Talabat.APIs
 			var Services = Scope.ServiceProvider;
 			var loggerFactory = Services.GetRequiredService<ILoggerFactory>();
 			var _dbContext = Services.GetRequiredService<ApplicationDbContext>();
+			var _applicationIdentityDbContext = Services.GetRequiredService<ApplicationIdentityDbContext>();
 			//Ask CLR for object form ApplicationDbContextExplicitly
 			try
 			{
 				await _dbContext.Database.MigrateAsync(); // Apply All Migration 
+				await _applicationIdentityDbContext.Database.MigrateAsync();
 				await ApplicationContextSeed.SeedData(_dbContext); //Data Seeding
 			}
 			catch (Exception ex)
