@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Route.Talabat.APIs.DTOs;
 using Route.Talabat.Core.Entities;
+using Route.Talabat.Core.Entities.Identity;
 
 namespace Route.Talabat.APIs.Helpers
 {
@@ -14,6 +15,7 @@ namespace Route.Talabat.APIs.Helpers
 				.ForMember(P => P.PictureUrl, O => O.MapFrom<ProductPictureUrlResolver>());
 			CreateMap<CustomerBasketDTO, CustomerBasket>();
 			CreateMap<BasketItemDTO, BasketItem>();
+			CreateMap<Address, AddressDTO>().ReverseMap();
 		}
 	}
 }
