@@ -28,7 +28,9 @@ namespace Route.Talabat.APIs
 
 			#region ConfigureServices
 			// Add services to the DI container.
-			webApplicationBuilder.Services.AddControllers();
+			webApplicationBuilder.Services.AddControllers().AddNewtonsoftJson(options => {
+				options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+			});
 			// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 			webApplicationBuilder.Services.AddSwaggerServices();
 			webApplicationBuilder.Services.AddDbContext<ApplicationDbContext>((options) =>
