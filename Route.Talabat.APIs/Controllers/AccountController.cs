@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Route.Talabat.APIs.DTOs;
@@ -61,6 +63,22 @@ namespace Route.Talabat.APIs.Controllers
 				Email = user.Email, 
 				Token = await _authService.CreateTokenAsync(user, _userManager)
 			});
+		}
+
+		[Authorize]
+		[HttpGet]
+		public async Task<ActionResult<UserDTO>> GetCurruntUSer()
+		{
+			var email = User.FindFirstValue(ClaimTypes.Email)?? String.Empty ;
+
+			var user = await _userManager.FindByEmailAsync(email);
+
+			return Ok(new UserDTO()
+			{
+				DisplayName = user.DisplayName,
+				Email = email,
+				Token = await _authService.CreateTokenAsync(user, _userManager)
+			}) ;
 		}
 	}
 }
