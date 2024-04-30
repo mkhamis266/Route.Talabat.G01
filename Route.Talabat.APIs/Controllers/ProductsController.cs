@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Route.Talabat.APIs.DTOs;
@@ -29,6 +30,7 @@ namespace Route.Talabat.APIs.Controllers
 			_productsBrandsRepo = productsBrandsRepo;
 		}
 
+		[Authorize]
 		[HttpGet]
 		public async Task<ActionResult<Pagination<ProductToReturnDTO>>> GetAllProducts([FromQuery]ProductSpecificationsParams productParams)
 		{
