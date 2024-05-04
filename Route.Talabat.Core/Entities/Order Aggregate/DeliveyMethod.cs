@@ -12,7 +12,7 @@ namespace Route.Talabat.Core.Entities.Order_Aggregate
 		public string Description { get; set; } = null!;
 
         public decimal Cost { get; set; }
-		public string DeliveyTime { get; set; } = null!;
+		public string DeliveryTime { get; set; } = null!;
 
 	}
 }

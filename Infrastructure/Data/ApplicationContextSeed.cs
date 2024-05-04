@@ -5,6 +5,7 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Route.Talabat.Core.Entities;
+using Route.Talabat.Core.Entities.Order_Aggregate;
 
 namespace Route.Talabat.Infrastructure.Data
 {
@@ -27,6 +28,7 @@ namespace Route.Talabat.Infrastructure.Data
 				{
 					dbContext.ProductBrands.Add(brand);
 				}
+				await dbContext.SaveChangesAsync();
 			}
 
 			if (Categories is not null && dbContext.ProductCategories.Count() == 0)
@@ -35,6 +37,7 @@ namespace Route.Talabat.Infrastructure.Data
 				{
 					dbContext.ProductCategories.Add(category);
 				}
+				await dbContext.SaveChangesAsync();
 			}
 
 			if (Products is not null && dbContext.Products.Count()== 0)
@@ -43,9 +46,23 @@ namespace Route.Talabat.Infrastructure.Data
 				{
 					dbContext.Products.Add(product);
 				}
+				await dbContext.SaveChangesAsync();
 			}
 
-			await dbContext.SaveChangesAsync();			
+			if (!dbContext.DelivreyMethods.Any())
+			{
+				var deliveryMethodJson = File.ReadAllText("../Infrastructure/Data/DataSeed/delivery.json");
+				var deliveryMethods = JsonSerializer.Deserialize<List<DelivreyMethod>>(deliveryMethodJson);
+
+				if (deliveryMethods?.Count> 0)
+				{
+					foreach (var item in deliveryMethods)
+					{
+						dbContext.DelivreyMethods.Add(item);
+					}
+				}
+				await dbContext.SaveChangesAsync();
+			}	
 		}
 	}
 }
