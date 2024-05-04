@@ -22,11 +22,11 @@ namespace Route.Talabat.Infrastructure.Data.Config.Order_Configs
 					(orderStatus) => (OrderStatus) Enum.Parse(typeof(OrderStatus),orderStatus)
 				);
 
-			builder.HasOne(order => order.DeliveyMethod).WithMany();
+			builder.HasOne(order => order.DeliveyMethod).WithMany().OnDelete(DeleteBehavior.SetNull);
 
 			builder.Property(order => order.SubTotal).HasColumnType("decimal(12,2)");
 
-
+			builder.HasMany(order => order.Items).WithOne().OnDelete(DeleteBehavior.Cascade);
 		}
 	}
 }

@@ -18,7 +18,7 @@ namespace Route.Talabat.Core.Entities.Order_Aggregate
 
 		public DelivreyMethod DeliveyMethod { get; set; } = null!;
 
-		ICollection<OrderItem> Items { get; set;} = new HashSet<OrderItem>();
+		public ICollection<OrderItem> Items { get; set;} = new HashSet<OrderItem>();
 
         public decimal SubTotal { get; set; }
 
