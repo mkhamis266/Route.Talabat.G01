@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Route.Talabat.Core.Entities;
+using Route.Talabat.Core.Entities.Order_Aggregate;
 
 namespace Route.Talabat.Infrastructure.Data
 {
@@ -23,6 +24,12 @@ namespace Route.Talabat.Infrastructure.Data
         public DbSet<ProductCategory> ProductCategories { get; set; }
 
         public DbSet<Product> Products { get; set; }
+
+        public DbSet<Order> Orders { get; set; }
+
+        public DbSet<OrderItem> OrdersItems { get; set; }
+
+        public DbSet<DelivreyMethod> DelivreyMethods { get; set; }
     }
 }
 
