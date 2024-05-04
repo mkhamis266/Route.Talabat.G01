@@ -6,17 +6,17 @@ using System.Threading.Tasks;
 
 namespace Route.Talabat.Core.Entities
 {
-	public class Product :BaseEntity
-	{
-		public string Name { get; set; }
-		public string Description { get; set; }
-		public string PictureUrl { get; set; }
-		public Decimal Price { get; set; }
+    public class Product : BaseEntity
+    {
+        public string Name { get; set; } = null!;
+        public string Description { get; set; } = null!;
+        public string PictureUrl { get; set; } = null!;
+        public decimal Price { get; set; }
 
-		public int BrandId {  get; set; }
-		public ProductBrand Brand { get; set; }
+        public int BrandId { get; set; }
+        public ProductBrand Brand { get; set; } = null!;
 
-		public int CategoryId {  get; set; }
-		public ProductCategory Category { get; set; }
-	}
+        public int CategoryId { get; set; }
+        public ProductCategory Category { get; set; } = null!;
+    }
 }

@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace Route.Talabat.Core.Entities
 {
-	public class ProductCategory : BaseEntity
-	{
+    public class ProductCategory : BaseEntity
+    {
         public string Name { get; set; }
     }
 }
