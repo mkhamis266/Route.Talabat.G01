@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Route.Talabat.Core.Entities.Order_Aggregate
 {
-	public class DeliveyMethod:BaseEntity
+	public class DelivreyMethod:BaseEntity
 	{
 		public string ShortName { get; set; } = null!;
 		public string Description { get; set; } = null!;
