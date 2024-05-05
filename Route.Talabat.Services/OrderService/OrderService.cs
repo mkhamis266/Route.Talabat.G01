@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Route.Talabat.Core;
 using Route.Talabat.Core.Entities;
 using Route.Talabat.Core.Entities.Order_Aggregate;
 using Route.Talabat.Core.Repositories.Contract;
@@ -15,24 +16,27 @@ namespace Route.Talabat.Services.OrderService
 {
 	public class OrderService : IOrderService
 	{
-		private readonly IGenericRepository<Product> _productsRepo;
 		private readonly IBasketRepository _basketRepo;
-		private readonly IGenericRepository<DelivreyMethod> _deliveryMethodsRepo;
-		private readonly IGenericRepository<Order> _orderRepo;
+		///private readonly IGenericRepository<Product> _productsRepo;
+		///private readonly IGenericRepository<DelivreyMethod> _deliveryMethodsRepo;
+		///private readonly IGenericRepository<Order> _orderRepo;
+		private readonly IUnitOfWork _unitOfWork;
 
 		public OrderService(
-			IGenericRepository<Product> productsRepo, 
 			IBasketRepository basketRepo,
-			IGenericRepository<DelivreyMethod> deliveryMethodsRepo,
-			IGenericRepository<Order> orderRepo
+			IUnitOfWork unitOfWork
+			///IGenericRepository<Product> productsRepo, 
+			///IGenericRepository<DelivreyMethod> deliveryMethodsRepo,
+			///IGenericRepository<Order> orderRepo
 			)
         {
-			_productsRepo = productsRepo;
 			_basketRepo = basketRepo;
-			_deliveryMethodsRepo = deliveryMethodsRepo;
-			_orderRepo = orderRepo;
+			_unitOfWork = unitOfWork;
+			///_productsRepo = productsRepo;
+			///_deliveryMethodsRepo = deliveryMethodsRepo;
+			///_orderRepo = orderRepo;
 		}
-        public async Task<Order> CreateOrderAsync(string buyerEmail, string basketId, int deliveryMethodId, Address shippingAddress)
+        public async Task<Order?> CreateOrderAsync(string buyerEmail, string basketId, int deliveryMethodId, Address shippingAddress)
 		{
 			//1- get basket form basket repo
 			var basket = await _basketRepo.GetCustomerBasket(basketId);
@@ -43,7 +47,7 @@ namespace Route.Talabat.Services.OrderService
 			{
 				foreach (var item in basket.Items)
 				{
-					var product = await _productsRepo.GetAsync(item.Id);
+					var product = await _unitOfWork.Repository<Product>().GetAsync(item.Id);
 					var productItemOrdered = new ProductItemOrdered(item.Id, product?.Name?? String.Empty,product?.PictureUrl?? String.Empty);
 
 					var orderItem = new OrderItem(productItemOrdered, item.Quantity, product.Price);
@@ -54,7 +58,7 @@ namespace Route.Talabat.Services.OrderService
 			decimal subTotal = orderItems.Sum(item=> item.Quantity*item.Price);
 
 			//4- get deliveryMethod from deliveryMethods repo
-			var deliveryMethod = await _deliveryMethodsRepo.GetAsync(deliveryMethodId);
+			var deliveryMethod = await _unitOfWork.Repository<DeliveryMethod>().GetAsync(deliveryMethodId);
 			//5- create order
 			Order order = new Order() {
 				BuyerEmail = buyerEmail,
@@ -63,13 +67,17 @@ namespace Route.Talabat.Services.OrderService
 				SubTotal = subTotal,
 				Items = orderItems,
 				};
-			//6- save To Database
+			_unitOfWork.Repository<Order>().Add(order);
 
-			_orderRepo.Add(order);
+			//6- save To Database
+			var result = await _unitOfWork.Compelete();
+
+			if (result <= 0) return null;
+
 			return order;
         }
 
-		public Task<IReadOnlyList<DelivreyMethod>> GetDelivreyMethodsAsync()
+		public Task<IReadOnlyList<DeliveryMethod>> GetDelivreyMethodsAsync()
 		{
 			throw new NotImplementedException();
 		}

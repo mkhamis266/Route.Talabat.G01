@@ -16,7 +16,7 @@ namespace Route.Talabat.Core.Entities.Order_Aggregate
 
         public Address ShippingAddress { get; set; } = null!;
 
-		public DelivreyMethod? DeliveyMethod { get; set; } = null!;
+		public DeliveryMethod? DeliveyMethod { get; set; } = null!;
 
 		public ICollection<OrderItem> Items { get; set;} = new HashSet<OrderItem>();
 

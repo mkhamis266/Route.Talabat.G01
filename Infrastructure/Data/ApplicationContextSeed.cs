@@ -52,7 +52,7 @@ namespace Route.Talabat.Infrastructure.Data
 			if (!dbContext.DelivreyMethods.Any())
 			{
 				var deliveryMethodJson = File.ReadAllText("../Infrastructure/Data/DataSeed/delivery.json");
-				var deliveryMethods = JsonSerializer.Deserialize<List<DelivreyMethod>>(deliveryMethodJson);
+				var deliveryMethods = JsonSerializer.Deserialize<List<DeliveryMethod>>(deliveryMethodJson);
 
 				if (deliveryMethods?.Count> 0)
 				{
