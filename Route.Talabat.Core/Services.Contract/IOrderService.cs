@@ -11,7 +11,7 @@ namespace Route.Talabat.Core.Services.Contract
 	{
 		Task<Order> CreateOrderAsync(string buyerEmail,string basketId,int deliveryMethodId,ShippingAddress shippingAddress);
 		Task<IReadOnlyList<Order>> GetOrdersForUserAsync(string buyerEmail);
-		Task<Order?> GetOrderByIdAsync(string buyerEmail,int orderId);
+		Task<Order?> GetOrderByIdForUserAsync(string buyerEmail,int orderId);
 		Task<IReadOnlyList<DeliveryMethod>> GetDelivreyMethodsAsync();
 	}
 }

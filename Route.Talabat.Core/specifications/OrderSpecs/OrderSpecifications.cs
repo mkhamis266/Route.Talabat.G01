@@ -15,10 +15,9 @@ namespace Route.Talabat.Core.specifications.OrderSpecs
 			AddOrderByDescending(order => order.OrderDate);
 		}
 
-		public OrderSpecifications(int Id):base(Order => Order.Id == Id)
+		public OrderSpecifications(string email, int Id):base(Order => (Order.BuyerEmail == email && Order.Id == Id))
 		{
 			AddInclides();
-			AddOrderByDescending(order => order.OrderDate);
 		}
 		private void AddInclides()
 		{

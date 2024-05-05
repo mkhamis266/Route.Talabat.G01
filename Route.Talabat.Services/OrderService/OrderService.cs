@@ -84,9 +84,12 @@ namespace Route.Talabat.Services.OrderService
 			throw new NotImplementedException();
 		}
 
-		public Task<Order> GetOrderByIdAsync(string buyerEmail, int orderId)
+		public async Task<Order?> GetOrderByIdForUserAsync(string buyerEmail, int orderId)
 		{
-			throw new NotImplementedException();
+			var ordersRepos = _unitOfWork.Repository<Order>();
+			var orderSpecifications = new OrderSpecifications(buyerEmail,orderId);
+			var order = await ordersRepos.GetWithSpecAsync(orderSpecifications);
+			return order;
 		}
 
 		public Task<IReadOnlyList<Order>> GetOrdersForUserAsync(string buyerEmail)
