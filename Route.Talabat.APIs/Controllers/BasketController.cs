@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Route.Talabat.APIs.DTOs;
 using Route.Talabat.APIs.Errors;
 using Route.Talabat.Core.Entities;
+using Route.Talabat.Core.Entities.Basket;
 using Route.Talabat.Core.Repositories.Contract;
 
 namespace Route.Talabat.APIs.Controllers

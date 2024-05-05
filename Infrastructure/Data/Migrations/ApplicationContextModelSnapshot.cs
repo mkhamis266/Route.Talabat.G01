@@ -47,7 +47,7 @@ namespace Route.Talabat.Infrastructure.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("DelivreyMethods");
+                    b.ToTable("DelivreyMethods", (string)null);
                 });
 
             modelBuilder.Entity("Route.Talabat.Core.Entities.Order_Aggregate.Order", b =>
@@ -83,7 +83,7 @@ namespace Route.Talabat.Infrastructure.Data.Migrations
 
                     b.HasIndex("DeliveyMethodId");
 
-                    b.ToTable("Orders");
+                    b.ToTable("Orders", (string)null);
                 });
 
             modelBuilder.Entity("Route.Talabat.Core.Entities.Order_Aggregate.OrderItem", b =>
@@ -107,7 +107,7 @@ namespace Route.Talabat.Infrastructure.Data.Migrations
 
                     b.HasIndex("OrderId");
 
-                    b.ToTable("OrdersItems");
+                    b.ToTable("OrdersItems", (string)null);
                 });
 
             modelBuilder.Entity("Route.Talabat.Core.Entities.Product", b =>
@@ -146,7 +146,7 @@ namespace Route.Talabat.Infrastructure.Data.Migrations
 
                     b.HasIndex("CategoryId");
 
-                    b.ToTable("Products");
+                    b.ToTable("Products", (string)null);
                 });
 
             modelBuilder.Entity("Route.Talabat.Core.Entities.ProductBrand", b =>
@@ -163,7 +163,7 @@ namespace Route.Talabat.Infrastructure.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ProductBrands");
+                    b.ToTable("ProductBrands", (string)null);
                 });
 
             modelBuilder.Entity("Route.Talabat.Core.Entities.ProductCategory", b =>
@@ -180,7 +180,7 @@ namespace Route.Talabat.Infrastructure.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ProductCategories");
+                    b.ToTable("ProductCategories", (string)null);
                 });
 
             modelBuilder.Entity("Route.Talabat.Core.Entities.Order_Aggregate.Order", b =>
@@ -190,7 +190,7 @@ namespace Route.Talabat.Infrastructure.Data.Migrations
                         .HasForeignKey("DeliveyMethodId")
                         .OnDelete(DeleteBehavior.SetNull);
 
-                    b.OwnsOne("Route.Talabat.Core.Entities.Order_Aggregate.Address", "ShippingAddress", b1 =>
+                    b.OwnsOne("Route.Talabat.Core.Entities.Order_Aggregate.Order.ShippingAddress#Route.Talabat.Core.Entities.Order_Aggregate.Address", "ShippingAddress", b1 =>
                         {
                             b1.Property<int>("OrderId")
                                 .HasColumnType("int");
@@ -217,7 +217,7 @@ namespace Route.Talabat.Infrastructure.Data.Migrations
 
                             b1.HasKey("OrderId");
 
-                            b1.ToTable("Orders");
+                            b1.ToTable("Orders", (string)null);
 
                             b1.WithOwner()
                                 .HasForeignKey("OrderId");
@@ -236,7 +236,7 @@ namespace Route.Talabat.Infrastructure.Data.Migrations
                         .HasForeignKey("OrderId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.OwnsOne("Route.Talabat.Core.Entities.Order_Aggregate.ProductItemOrdered", "Product", b1 =>
+                    b.OwnsOne("Route.Talabat.Core.Entities.Order_Aggregate.OrderItem.Product#Route.Talabat.Core.Entities.Order_Aggregate.ProductItemOrdered", "Product", b1 =>
                         {
                             b1.Property<int>("OrderItemId")
                                 .HasColumnType("int");
@@ -254,7 +254,7 @@ namespace Route.Talabat.Infrastructure.Data.Migrations
 
                             b1.HasKey("OrderItemId");
 
-                            b1.ToTable("OrdersItems");
+                            b1.ToTable("OrdersItems", (string)null);
 
                             b1.WithOwner()
                                 .HasForeignKey("OrderItemId");

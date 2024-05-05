@@ -1,17 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 
-namespace Route.Talabat.Core.Entities.Order_Aggregate
+namespace Route.Talabat.APIs.DTOs
 {
-	public class Address
+	public class ShippingAddressDTO
 	{
+		[Required]
 		public string FirstName { get; set; } = null!;
+		[Required]
 		public string LastName { get; set; } = null!;
+		[Required]
 		public string Street { get; set; } = null!;
+		[Required]
 		public string City { get; set; } = null!;
+		[Required]
 		public string Country { get; set; } = null!;
 	}
 }

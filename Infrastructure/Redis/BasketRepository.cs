@@ -6,6 +6,7 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Route.Talabat.Core.Entities;
+using Route.Talabat.Core.Entities.Basket;
 using Route.Talabat.Core.Repositories.Contract;
 using StackExchange.Redis;
 

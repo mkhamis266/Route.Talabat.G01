@@ -14,7 +14,7 @@ namespace Route.Talabat.Core.Entities.Order_Aggregate
 
         public OrderStatus Status { get; set; } = OrderStatus.Pending;
 
-        public Address ShippingAddress { get; set; } = null!;
+        public ShippingAddress ShippingAddress { get; set; } = null!;
 
 		public DeliveryMethod? DeliveyMethod { get; set; } = null!;
 

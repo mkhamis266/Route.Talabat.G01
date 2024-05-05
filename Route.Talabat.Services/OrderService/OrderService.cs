@@ -36,7 +36,7 @@ namespace Route.Talabat.Services.OrderService
 			///_deliveryMethodsRepo = deliveryMethodsRepo;
 			///_orderRepo = orderRepo;
 		}
-        public async Task<Order?> CreateOrderAsync(string buyerEmail, string basketId, int deliveryMethodId, Address shippingAddress)
+        public async Task<Order?> CreateOrderAsync(string buyerEmail, string basketId, int deliveryMethodId, ShippingAddress shippingAddress)
 		{
 			//1- get basket form basket repo
 			var basket = await _basketRepo.GetCustomerBasket(basketId);

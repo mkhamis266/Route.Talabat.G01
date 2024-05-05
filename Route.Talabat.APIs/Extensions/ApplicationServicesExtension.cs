@@ -8,6 +8,8 @@ using Route.Talabat.Infrastructure;
 using StackExchange.Redis;
 using Route.Talabat.Core.Redis;
 using Route.Talabat.Core;
+using Route.Talabat.Core.Services.Contract;
+using Route.Talabat.Services.OrderService;
 
 namespace Route.Talabat.APIs.Extensions
 {
@@ -15,7 +17,8 @@ namespace Route.Talabat.APIs.Extensions
 	{
 		public static IServiceCollection AddApplicationServices(this IServiceCollection services)
 		{
-			
+
+			services.AddScoped(typeof(IOrderService), typeof(OrderService));
 			//services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 
 			services.AddScoped(typeof(IUnitOfWork),typeof(UnitOfWork));
