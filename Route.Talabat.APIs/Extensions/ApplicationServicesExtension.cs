@@ -7,6 +7,7 @@ using Route.Talabat.Infrastructure.Data;
 using Route.Talabat.Infrastructure;
 using StackExchange.Redis;
 using Route.Talabat.Core.Redis;
+using Route.Talabat.Core;
 
 namespace Route.Talabat.APIs.Extensions
 {
@@ -15,9 +16,9 @@ namespace Route.Talabat.APIs.Extensions
 		public static IServiceCollection AddApplicationServices(this IServiceCollection services)
 		{
 			
-			services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+			//services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 
-			
+			services.AddScoped(typeof(IUnitOfWork),typeof(UnitOfWork));
 
 			services.AddAutoMapper(typeof(MappingProfiles));
 			services.Configure<ApiBehaviorOptions>(options =>
