@@ -1,33 +1,36 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Route.Talabat.APIs.DTOs;
 using Route.Talabat.APIs.Errors;
 using Route.Talabat.APIs.Helpers;
 using Route.Talabat.Core.Entities;
-using Route.Talabat.Core.Repositories.Contract;
-using Route.Talabat.Core.specifications;
+using Route.Talabat.Core.Services.Contract;
 using Route.Talabat.Core.specifications.ProductSpecs;
 
 namespace Route.Talabat.APIs.Controllers
 {
 	public class ProductsController : BaseApiController
 	{
-		private readonly IGenericRepository<Product> productsRepository;
+		//private readonly IGenericRepository<Product> productsRepository;
+		//private readonly IGenericRepository<ProductCategory> _productCatigoriesRepo;
+		//private readonly IGenericRepository<ProductBrand> _productsBrandsRepo;
 		private readonly IMapper _mapper;
-		private readonly IGenericRepository<ProductCategory> _productCatigoriesRepo;
-		private readonly IGenericRepository<ProductBrand> _productsBrandsRepo;
+		private readonly IProductService _productService;
 
-		public ProductsController(IGenericRepository<Product> genericRepository,IMapper mapper,
-			IGenericRepository<ProductCategory> productCatigoriesRepo,
-			IGenericRepository<ProductBrand> productsBrandsRepo
+		public ProductsController(
+			//IGenericRepository<Product> genericRepository,
+			//IGenericRepository<ProductCategory> productCatigoriesRepo,
+			//IGenericRepository<ProductBrand> productsBrandsRepo,
+			IMapper mapper,
+			IProductService productService
 			)
 		{
-			productsRepository = genericRepository;
+			//productsRepository = genericRepository;
+			//_productCatigoriesRepo = productCatigoriesRepo;
+			//_productsBrandsRepo = productsBrandsRepo;
 			_mapper = mapper;
-			_productCatigoriesRepo = productCatigoriesRepo;
-			_productsBrandsRepo = productsBrandsRepo;
+			_productService = productService;
 		}
 
 		[Authorize]
@@ -35,11 +38,10 @@ namespace Route.Talabat.APIs.Controllers
 		public async Task<ActionResult<Pagination<ProductToReturnDTO>>> GetAllProducts([FromQuery]ProductSpecificationsParams productParams)
 		{
 			//var Products = await productsRepository.GetAllAsync();
-			var productSpecs = new ProductsWithBrandAndCategorySpecifications(productParams);
-			var Products = await productsRepository.GetAllWithSpecAsync(productSpecs);
+			
+			var Products = await _productService.GetProductsAsync(productParams);
 			var Data = _mapper.Map<IReadOnlyList<Product>, IReadOnlyList<ProductToReturnDTO>>(Products);
-			var productSpecsForCount = new ProductWithFiltersForCountSpecifications(productParams); 
-			var Count = await productsRepository.GetCountAsync(productSpecsForCount);
+			var Count = await _productService.GetCountAsync(productParams);
 			return Ok(new Pagination<ProductToReturnDTO>(productParams.PageIndex, productParams.PageSize,Count,Data));
 		}
 
@@ -48,9 +50,8 @@ namespace Route.Talabat.APIs.Controllers
 		[ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
 		public async Task<ActionResult<ProductToReturnDTO>> GetProductById(int id)
 		{
-			//var Product = await productsRepository.GetAsync(id);
-			var ProductSpecs = new ProductsWithBrandAndCategorySpecifications(id);
-			var Product = await productsRepository.GetWithSpecAsync(ProductSpecs);
+			
+			var Product = await _productService.GetProductAsync(id);
 			if(Product is null)
 				return NotFound(new { Message = "Not Found",StatusCode = 404});
 			return Ok(_mapper.Map<Product,ProductToReturnDTO>(Product));
@@ -59,14 +60,14 @@ namespace Route.Talabat.APIs.Controllers
 		[HttpGet("brands")]
 		public async Task<ActionResult<IReadOnlyList<ProductBrand>>> GetProductBrands()
 		{
-			var brands =  await _productsBrandsRepo.GetAllAsync();
+			var brands =  await _productService.GetBrandsAsync();
 			return Ok(brands);
 		}
 
 		[HttpGet("categories")]
-		public async Task<ActionResult<IReadOnlyList<ProductBrand>>> GetProductCategories()
+		public async Task<ActionResult<IReadOnlyList<ProductCategory>>> GetProductCategories()
 		{
-			var categories = await _productCatigoriesRepo.GetAllAsync();
+			var categories = await _productService.GetCategoriesAsync();
 			return Ok(categories);
 		}
 	}

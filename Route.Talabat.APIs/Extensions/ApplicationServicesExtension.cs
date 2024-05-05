@@ -1,15 +1,13 @@
-﻿using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Route.Talabat.APIs.Errors;
 using Route.Talabat.APIs.Helpers;
 using Route.Talabat.Core.Repositories.Contract;
-using Route.Talabat.Infrastructure.Data;
 using Route.Talabat.Infrastructure;
-using StackExchange.Redis;
 using Route.Talabat.Core.Redis;
 using Route.Talabat.Core;
 using Route.Talabat.Core.Services.Contract;
 using Route.Talabat.Services.OrderService;
+using Route.Talabat.Services.ProductService;
 
 namespace Route.Talabat.APIs.Extensions
 {
@@ -20,7 +18,7 @@ namespace Route.Talabat.APIs.Extensions
 
 			services.AddScoped(typeof(IOrderService), typeof(OrderService));
 			//services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
-
+			services.AddScoped(typeof(IProductService), typeof(ProductService));	
 			services.AddScoped(typeof(IUnitOfWork),typeof(UnitOfWork));
 
 			services.AddAutoMapper(typeof(MappingProfiles));
