@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using Route.Talabat.Core;
 using Route.Talabat.Core.Entities;
 using Route.Talabat.Core.Entities.Order_Aggregate;
 using Route.Talabat.Core.Repositories.Contract;
 using Route.Talabat.Core.Services.Contract;
+using Route.Talabat.Core.specifications.OrderSpecs;
 using Route.Talabat.Infrastructure;
 using Route.Talabat.Infrastructure.Data;
 
@@ -89,7 +91,10 @@ namespace Route.Talabat.Services.OrderService
 
 		public Task<IReadOnlyList<Order>> GetOrdersForUserAsync(string buyerEmail)
 		{
-			throw new NotImplementedException();
+			var ordersRepos = _unitOfWork.Repository<Order>();
+			var orderSpecifications = new OrderSpecifications(buyerEmail);
+			var orders = ordersRepos.GetAllWithSpecAsync(orderSpecifications);
+			return orders;
 		}
 	}
 }

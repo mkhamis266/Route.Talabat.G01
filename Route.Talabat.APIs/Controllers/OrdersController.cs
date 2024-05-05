@@ -28,5 +28,12 @@ namespace Route.Talabat.APIs.Controllers
 			if (order is null) return BadRequest(new ApiResponse(400));
 			return Ok(order);
 		}
+
+		[HttpGet] // GET : /api/Orders?email=""
+		public async Task<ActionResult<IReadOnlyList<Order>>> GetOrdersForUser(string email)
+		{
+			var orders = await _orderService.GetOrdersForUserAsync(email);
+			return Ok(orders);
+		}
 	}
 }
