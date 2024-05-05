@@ -79,10 +79,8 @@ namespace Route.Talabat.Services.OrderService
 			return order;
         }
 
-		public Task<IReadOnlyList<DeliveryMethod>> GetDelivreyMethodsAsync()
-		{
-			throw new NotImplementedException();
-		}
+		public async Task<IReadOnlyList<DeliveryMethod>> GetDelivreyMethodsAsync()
+			=> await _unitOfWork.Repository<DeliveryMethod>().GetAllAsync();
 
 		public async Task<Order?> GetOrderByIdForUserAsync(string buyerEmail, int orderId)
 		{

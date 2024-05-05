@@ -49,5 +49,12 @@ namespace Route.Talabat.APIs.Controllers
 			var orderToReturnDto = _mapper.Map<Core.Entities.Order_Aggregate.Order, OrderToReturnDTO>(order);
 			return Ok(orderToReturnDto);
 		}
+
+		[HttpGet("deliverymethods")]
+		public async Task<ActionResult<IReadOnlyList<DeliveryMethod>>> GetDeliveryMethod()
+		{
+			var deliveryMethod = await _orderService.GetDelivreyMethodsAsync();
+			return Ok(deliveryMethod);
+		}
 	}
 }
