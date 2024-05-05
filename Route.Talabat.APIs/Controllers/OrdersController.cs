@@ -4,6 +4,7 @@ using Route.Talabat.APIs.DTOs;
 using Route.Talabat.APIs.Errors;
 using Route.Talabat.Core.Entities.Order_Aggregate;
 using Route.Talabat.Core.Services.Contract;
+using StackExchange.Redis;
 
 namespace Route.Talabat.APIs.Controllers
 {
@@ -18,32 +19,35 @@ namespace Route.Talabat.APIs.Controllers
 			_mapper = mapper;
 		}
 
-		[ProducesResponseType(typeof(Order), StatusCodes.Status200OK)]
+		[ProducesResponseType(typeof(OrderToReturnDTO), StatusCodes.Status200OK)]
 		[ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
 		[HttpPost]
-		public async Task<ActionResult<Order?>> CreateOrder(OrderDTO model)
+		public async Task<ActionResult<OrderToReturnDTO?>> CreateOrder(OrderDTO model)
 		{
 			var address = _mapper.Map<ShippingAddressDTO, ShippingAddress>(model.ShippingAddress);
 			var order = await _orderService.CreateOrderAsync(model.BuyerEmail, model.BasketId, model.DeliveryMethodId, address);
 			if (order is null) return BadRequest(new ApiResponse(400));
-			return Ok(order);
+			var orderToReturnDto = _mapper.Map<Core.Entities.Order_Aggregate.Order, OrderToReturnDTO>(order);
+			return Ok(orderToReturnDto);
 		}
 
 		[HttpGet] // GET : /api/Orders?email=""
-		public async Task<ActionResult<IReadOnlyList<Order>>> GetOrdersForUser(string email)
+		public async Task<ActionResult<IReadOnlyList<OrderToReturnDTO>>> GetOrdersForUser(string email)
 		{
 			var orders = await _orderService.GetOrdersForUserAsync(email);
-			return Ok(orders);
+			var orderToReturnDto = _mapper.Map<IReadOnlyList<Core.Entities.Order_Aggregate.Order>, IReadOnlyList<OrderToReturnDTO>>(orders);
+			return Ok(orderToReturnDto);
 		}
 
-		[ProducesResponseType(typeof(Order), StatusCodes.Status200OK)]
+		[ProducesResponseType(typeof(OrderToReturnDTO), StatusCodes.Status200OK)]
 		[ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
 		[HttpGet("{id}")]
-		public async Task<ActionResult<Order>> GetOrderForUser(string email,int id)
+		public async Task<ActionResult<OrderToReturnDTO>> GetOrderForUser(string email,int id)
 		{
 			var order = await _orderService.GetOrderByIdForUserAsync(email, id);
 			if (order is null) return NotFound(new ApiResponse(404));
-			return Ok(order);
+			var orderToReturnDto = _mapper.Map<Core.Entities.Order_Aggregate.Order, OrderToReturnDTO>(order);
+			return Ok(orderToReturnDto);
 		}
 	}
 }

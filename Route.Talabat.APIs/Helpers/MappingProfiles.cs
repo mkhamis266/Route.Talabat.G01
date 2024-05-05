@@ -3,6 +3,7 @@ using Route.Talabat.APIs.DTOs;
 using Route.Talabat.Core.Entities;
 using Route.Talabat.Core.Entities.Basket;
 using Route.Talabat.Core.Entities.Identity;
+using Route.Talabat.Core.Entities.Order_Aggregate;
 
 namespace Route.Talabat.APIs.Helpers
 {
@@ -17,7 +18,22 @@ namespace Route.Talabat.APIs.Helpers
 			CreateMap<CustomerBasketDTO, CustomerBasket>();
 			CreateMap<BasketItemDTO, BasketItem>();
 			CreateMap<Address, AddressDTO>().ReverseMap();
-			CreateMap<ShippingAddressDTO, Core.Entities.Order_Aggregate.ShippingAddress>();
+			CreateMap<ShippingAddressDTO, ShippingAddress>();
+
+			CreateMap<OrderItem, OrderItemDTO>()
+				.ForMember(orderItemDto => orderItemDto.ProductId, O => O.MapFrom(orderItem => orderItem.Product.ProductId))
+				.ForMember(orderItemDto => orderItemDto.ProductName, O => O.MapFrom(orderItem => orderItem.Product.ProductName))
+				.ForMember(orderItemDto => orderItemDto.PictureURL, O => O.MapFrom(orderItem => orderItem.Product.PictureURL))
+				.ForMember(orderItemDto => orderItemDto.PictureURL, O =>
+				{
+					O.MapFrom<OrderItemPictureUrlResolver>();
+				});
+
+			CreateMap<Order, OrderToReturnDTO>()
+				.ForMember(ordrToReturnDto => ordrToReturnDto.DeliveyMethod, O => O.MapFrom(order => order.DeliveyMethod.ShortName))
+				.ForMember(ordrToReturnDto => ordrToReturnDto.DeliveyMethodCoast, O => O.MapFrom(order => order.DeliveyMethod.Cost));
+
+
 		}
 	}
 }
