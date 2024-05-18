@@ -37,7 +37,7 @@ namespace Route.Talabat.APIs
 			{
 				options.UseSqlServer(webApplicationBuilder.Configuration.GetConnectionString("defaultConnection"));
 			});
-			webApplicationBuilder.Services.AddApplicationServices();
+
 			webApplicationBuilder.Services.AddSingleton<IConnectionMultiplexer>((servicesProvider) => {
 				var connection = webApplicationBuilder.Configuration.GetConnectionString("Redis");
 				return ConnectionMultiplexer.Connect(connection);
@@ -70,6 +70,8 @@ namespace Route.Talabat.APIs
 					ClockSkew = TimeSpan.Zero,
 				};
 			});
+
+			webApplicationBuilder.Services.AddApplicationServices();
 			#endregion
 
 			var app = webApplicationBuilder.Build();

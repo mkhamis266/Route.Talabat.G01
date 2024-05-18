@@ -8,5 +8,6 @@ namespace Route.Talabat.APIs.DTOs
 		public string Id { get; set; }
 
 		public List<BasketItemDTO> Items { get; set; }
+		public int?  DeliveryMethodId { get; set; }
 	}
 }

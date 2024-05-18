@@ -24,6 +24,7 @@ namespace Route.Talabat.Infrastructure
 			if(typeof(T) == typeof(Product))
 				return (IReadOnlyList < T >) await _dbContext.Products.Include(P => P.Brand).Include
 					(P => P.Category).ToListAsync();
+
 			return await _dbContext.Set<T>().ToListAsync();
 		}
 
@@ -31,11 +32,11 @@ namespace Route.Talabat.Infrastructure
 
 		public async Task<T?> GetAsync(int id)
 		{
-			if (typeof(T) == typeof(Product))
-				return await _dbContext.Set<Product>().Where(p => p.Id == id).Include(p => p.Brand).Include
-					(p => p.Category).FirstOrDefaultAsync() as T;
+			//if (typeof(T) == typeof(Product))
+			//	return await _dbContext.Set<Product>().Where(p => p.Id == id).Include(p => p.Brand).Include
+			//		(p => p.Category).FirstOrDefaultAsync() as T;
 
-				return await _dbContext.FindAsync<T>(id);
+			return await _dbContext.FindAsync<T>(id);
 		}
 		public async Task<IReadOnlyList<T>> GetAllWithSpecAsync(ISpecifications<T> specs)
 		{
