@@ -9,7 +9,7 @@ namespace Route.Talabat.APIs.DTOs
 
 		public List<BasketItemDTO> Items { get; set; }
 		public string? PaymenyIntentId { get; set; }
-		public string? ClintSecret { get; set; }
+		public string? ClientSecret { get; set; }
 		public decimal ShippingPrice { get; set; }
 		public int?  DeliveryMethodId { get; set; }
 	}

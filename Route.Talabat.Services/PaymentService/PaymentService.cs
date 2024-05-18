@@ -28,6 +28,7 @@ namespace Route.Talabat.Services.PaymentService
 
 			var basket = await _basketRepo.GetCustomerBasket(basketId);
 			if (basket is null) return null;
+
 			var shippingPrice = 0m;
 
 			if (basket.DeliveryMethodId.HasValue)
@@ -40,23 +41,25 @@ namespace Route.Talabat.Services.PaymentService
 			if (basket.Items.Count > 0)
 			{
 				var productRepo = _unitOfWork.Repository<Product>();
-				basket.Items.ForEach(async item =>
+				foreach (var item in basket.Items)
 				{
 					var product = await productRepo.GetAsync(item.Id);
-					if (item.Price != product.Price) item.Price = product.Price;
-				});
+					if(item.Price != product.Price)
+						item.Price = product.Price;
+				}
 			}
 
 
 			PaymentIntent paymentIntent;
 			PaymentIntentService paymentIntentService = new PaymentIntentService();
+
 			if(string.IsNullOrEmpty(basket.PaymenyIntentId)) // create
 			{
 				var options = new PaymentIntentCreateOptions()
 				{
 					Amount = (long)basket.Items.Sum(item => item.Quantity * item.Price * 100) + (long)shippingPrice * 100,
 					Currency = "USD",
-					PaymentMethodTypes = new List<string> { "card" }
+					PaymentMethodTypes = new List<string>() { "card" }
 				};
 				paymentIntent = await paymentIntentService.CreateAsync(options);
 				basket.PaymenyIntentId = paymentIntent.Id;

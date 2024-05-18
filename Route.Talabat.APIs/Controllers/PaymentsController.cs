@@ -7,16 +7,16 @@ using Route.Talabat.Core.Services.Contract;
 
 namespace Route.Talabat.APIs.Controllers
 {
-	public class PaymentsController : BaseApiController
+	public class PaymentController : BaseApiController
 	{
 		private readonly IPaymentService _paymentService;
 
-		public PaymentsController(IPaymentService paymentService)
+		public PaymentController(IPaymentService paymentService)
 		{
 			_paymentService = paymentService;
 		}
 
-		[HttpGet("{basketid}")]
+		[HttpPost("{basketid}")]
 		[Authorize]
 		[ProducesResponseType(typeof(CustomerBasket), StatusCodes.Status200OK)]
 		[ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
