@@ -33,7 +33,7 @@ namespace Route.Talabat.APIs.Controllers
 			_productService = productService;
 		}
 
-		[Authorize]
+		//[Authorize]
 		[HttpGet]
 		public async Task<ActionResult<Pagination<ProductToReturnDTO>>> GetAllProducts([FromQuery]ProductSpecificationsParams productParams)
 		{
