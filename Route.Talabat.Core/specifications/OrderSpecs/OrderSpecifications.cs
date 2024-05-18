@@ -22,7 +22,7 @@ namespace Route.Talabat.Core.specifications.OrderSpecs
 		private void AddInclides()
 		{
 			Includes.Add(order => order.Items);
-			Includes.Add(order => order.DeliveyMethod);
+			Includes.Add(order => order.DelivreyMethod);
 
 
 		}

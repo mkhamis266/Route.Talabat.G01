@@ -30,8 +30,8 @@ namespace Route.Talabat.APIs.Helpers
 				});
 
 			CreateMap<Order, OrderToReturnDTO>()
-				.ForMember(ordrToReturnDto => ordrToReturnDto.DeliveyMethod, O => O.MapFrom(order => order.DeliveyMethod.ShortName))
-				.ForMember(ordrToReturnDto => ordrToReturnDto.DeliveyMethodCoast, O => O.MapFrom(order => order.DeliveyMethod.Cost));
+				.ForMember(ordrToReturnDto => ordrToReturnDto.DeliveyMethod, O => O.MapFrom(order => order.DelivreyMethod.ShortName))
+				.ForMember(ordrToReturnDto => ordrToReturnDto.DeliveyMethodCoast, O => O.MapFrom(order => order.DelivreyMethod.Cost));
 
 
 		}

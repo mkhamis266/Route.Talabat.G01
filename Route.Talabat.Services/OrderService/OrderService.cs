@@ -1,18 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.EntityFrameworkCore;
-using Route.Talabat.Core;
+﻿using Route.Talabat.Core;
 using Route.Talabat.Core.Entities;
 using Route.Talabat.Core.Entities.Order_Aggregate;
 using Route.Talabat.Core.Repositories.Contract;
 using Route.Talabat.Core.Services.Contract;
 using Route.Talabat.Core.specifications.OrderSpecs;
-using Route.Talabat.Infrastructure;
-using Route.Talabat.Infrastructure.Data;
+using Stripe;
+using Product = Route.Talabat.Core.Entities.Product;
 
 namespace Route.Talabat.Services.OrderService
 {
@@ -23,10 +16,12 @@ namespace Route.Talabat.Services.OrderService
 		///private readonly IGenericRepository<DelivreyMethod> _deliveryMethodsRepo;
 		///private readonly IGenericRepository<Order> _orderRepo;
 		private readonly IUnitOfWork _unitOfWork;
+		private readonly IPaymentService _paymentService;
 
 		public OrderService(
 			IBasketRepository basketRepo,
-			IUnitOfWork unitOfWork
+			IUnitOfWork unitOfWork,
+			IPaymentService paymentService
 			///IGenericRepository<Product> productsRepo, 
 			///IGenericRepository<DelivreyMethod> deliveryMethodsRepo,
 			///IGenericRepository<Order> orderRepo
@@ -34,6 +29,7 @@ namespace Route.Talabat.Services.OrderService
         {
 			_basketRepo = basketRepo;
 			_unitOfWork = unitOfWork;
+			_paymentService = paymentService;
 			///_productsRepo = productsRepo;
 			///_deliveryMethodsRepo = deliveryMethodsRepo;
 			///_orderRepo = orderRepo;
@@ -61,15 +57,19 @@ namespace Route.Talabat.Services.OrderService
 
 			//4- get deliveryMethod from deliveryMethods repo
 			var deliveryMethod = await _unitOfWork.Repository<DeliveryMethod>().GetAsync(deliveryMethodId);
+
+			var orderSpec = new OrderWithPaymenyIntentIdSpecs(basket.PaymenyIntentId);
+			var orderRepo = _unitOfWork.Repository<Order>();
+			var exsistingOrder = await orderRepo.GetWithSpecAsync(orderSpec);
+
+			if (exsistingOrder is not null)
+			{
+				orderRepo.Delete(exsistingOrder);
+				await _paymentService.CreateOrUpdatePaymentIntent(basket.Id);
+			}
 			//5- create order
-			Order order = new Order() {
-				BuyerEmail = buyerEmail,
-				DeliveyMethod = deliveryMethod,
-				ShippingAddress = shippingAddress,
-				SubTotal = subTotal,
-				Items = orderItems,
-				};
-			_unitOfWork.Repository<Order>().Add(order);
+			Order order = new Order(buyerEmail: buyerEmail,shippingAddress: shippingAddress,deliveryMethod:deliveryMethod, items:orderItems,subTotal:subTotal,paymentIntentId:basket.PaymenyIntentId);
+			orderRepo.Add(order);
 
 			//6- save To Database
 			var result = await _unitOfWork.Compelete();
