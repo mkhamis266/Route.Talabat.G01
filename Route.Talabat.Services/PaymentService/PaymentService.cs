@@ -4,6 +4,7 @@ using Route.Talabat.Core.Entities.Basket;
 using Route.Talabat.Core.Entities.Order_Aggregate;
 using Route.Talabat.Core.Repositories.Contract;
 using Route.Talabat.Core.Services.Contract;
+using Route.Talabat.Core.specifications.OrderSpecs;
 using Route.Talabat.Infrastructure;
 using Stripe;
 using Product = Route.Talabat.Core.Entities.Product;
@@ -75,6 +76,22 @@ namespace Route.Talabat.Services.PaymentService
 			}
 			await _basketRepo.UpdateCustomerBasket(basket);
 			return basket;
+		}
+
+		public async Task<Order?> UpdateOrderStatus(string paymentIntentId, bool isPaid)
+		{
+			var orderSpec = new OrderWithPaymenyIntentIdSpecs(paymentIntentId);
+			var exsitOrder = await _unitOfWork.Repository<Order>().GetWithSpecAsync(orderSpec);
+			if (exsitOrder is null) return null;
+
+			if (isPaid)
+				exsitOrder.Status = OrderStatus.PaymentRecived;
+			else
+				exsitOrder.Status = OrderStatus.PaymenyFailed;
+			 
+			_unitOfWork.Repository<Order>().Update(exsitOrder);
+			await _unitOfWork.Compelete()	;
+			return exsitOrder;
 		}
 	}
 }
