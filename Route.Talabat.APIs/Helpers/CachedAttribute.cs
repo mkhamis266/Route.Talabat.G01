@@ -20,7 +20,7 @@ namespace Route.Talabat.APIs.Helpers
 			var cachKey = GenerateCashKeyFromRequest(context.HttpContext.Request);
 
 			var getResponseCaching = await cachingService.GetCashedResponseAsync(cachKey);
-			if (string.IsNullOrEmpty(getResponseCaching))
+			if (!string.IsNullOrEmpty(getResponseCaching))
 			{
 				var result = new ContentResult()
 				{

@@ -35,7 +35,7 @@ namespace Route.Talabat.APIs.Controllers
 
 		//[Authorize]
 		[HttpGet]
-		[Cashed(600)]
+		
 		public async Task<ActionResult<Pagination<ProductToReturnDTO>>> GetAllProducts([FromQuery]ProductSpecificationsParams productParams)
 		{
 			//var Products = await productsRepository.GetAllAsync();
