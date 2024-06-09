@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Route.Talabat.Services.CavhingService
 {
-	internal class CachingService : ICachingService
+	public class CachingService : ICachingService
 	{
 		private readonly IDatabase _database;
 		public CachingService(IConnectionMultiplexer redis)

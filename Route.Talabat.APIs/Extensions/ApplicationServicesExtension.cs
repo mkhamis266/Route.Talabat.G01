@@ -9,6 +9,7 @@ using Route.Talabat.Core.Services.Contract;
 using Route.Talabat.Services.OrderService;
 using Route.Talabat.Services.ProductService;
 using Route.Talabat.Services.PaymentService;
+using Route.Talabat.Services.CavhingService;
 
 namespace Route.Talabat.APIs.Extensions
 {
@@ -19,7 +20,7 @@ namespace Route.Talabat.APIs.Extensions
 			services.AddScoped(typeof(IPaymentService), typeof(PaymentService));
 			services.AddScoped(typeof(IOrderService), typeof(OrderService));
 			//services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
-			services.AddScoped(typeof(ICachingService), typeof(ICachingService));
+			services.AddScoped(typeof(ICachingService), typeof(CachingService));
 			services.AddScoped(typeof(IProductService), typeof(ProductService));	
 			services.AddScoped(typeof(IUnitOfWork),typeof(UnitOfWork));
 
